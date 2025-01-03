@@ -42,13 +42,17 @@ A modern web application for managing restaurant leads and Key Account Manager (
    npm install
    ```
 
+
 3. **Set up the database**
    - Create a MySQL database
    - Run the schema file:
      ```bash
      mysql -u your_username -p your_database < database/schema.sql
      ```
-
+   - Load the sample data:
+     ```bash
+     mysql -u your_username -p your_database < database/sample_data.sql
+     ```
 4. **Configure environment variables**
    - Create a `.env` file in the root directory
    - Add the following configurations:
