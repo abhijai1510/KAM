@@ -132,14 +132,32 @@ A modern web application for managing restaurant leads and Key Account Manager (
                     └────────────────┘
 ```
 
-## 🤝 Contributing
 
-Feel free to fork the repository and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
 
-## 📝 License
+## 🔧 Key Functions
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Frontend Functions (app.js)
 
-## 🙏 Support
+#### Data Management
+- `fetchKAMs()` - Retrieves all KAMs from the server
+- `fetchRestaurants()` - Fetches the list of restaurants
+- `fetchInteractions()` - Gets all interactions history
+- `saveRestaurant()` - Saves new or updates existing restaurant
+- `saveContact()` - Adds a new contact to a restaurant
+- `saveInteraction()` - Records a new interaction
 
-For support, email support@example.com or join our Slack channel.
+#### UI Management
+- `loadDashboard()` - Initializes the dashboard view with statistics
+- `loadRestaurants()` - Displays the restaurant management interface
+- `loadInteractions()` - Shows the interactions history view
+- `updateRecentActivities()` - Refreshes the recent activities panel
+- `handleSearch()` - Manages the search functionality
+- `populateKAMSelect()` - Updates KAM dropdown menus
+
+#### Form Handling
+- `editRestaurant(id)` - Opens edit form for a specific restaurant
+- `showContacts(restaurantId)` - Displays contacts for a restaurant
+- `showAddContactForm(restaurantId)` - Opens the add contact form
+- `addContact(restaurantId)` - Initiates contact addition
+- `addInteraction(restaurantId)` - Opens interaction form
+
