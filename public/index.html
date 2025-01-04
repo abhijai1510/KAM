@@ -15,9 +15,13 @@
         <!-- Sidebar -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <h3>KAM Dashboard 
-                    <i class='bx bx-menu'></i>  by Abhijai Srivastava
-                </h3>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h3 class="mb-0">KAM Dashboard</h3>
+                        <small class="text-muted">by Abhijai Srivastava</small>
+                    </div>
+                    <i class='bx bx-menu'></i>
+                </div>
             </div>
             <ul class="list-unstyled components">
                 <li class="active">
@@ -35,7 +39,15 @@
                         <i class='bx bx-conversation'></i> Interactions
                     </a>
                 </li>
+                <li>
+                    <a href="#" id="kamsLink">
+                        <i class='bx bx-user'></i> KAM Management
+                    </a>
+                </li>
             </ul>
+            <div class="sidebar-footer">
+                <small>- Udaan Internship Assignment</small>
+            </div>
         </nav>
 
         <div id="content">
@@ -188,6 +200,38 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="saveInteraction">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KAM Modal -->
+    <div class="modal fade" id="kamModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add KAM</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="kamForm">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="kamName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="kamEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="kamPhone" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveKam">Save</button>
                 </div>
             </div>
         </div>

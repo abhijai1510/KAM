@@ -27,7 +27,7 @@ db.connect((err) => {
     }
     console.log('Connected to database successfully');
     
-    // Test query to check if data exists
+    // test to check if data exists
     db.query('SELECT COUNT(*) as count FROM restaurants', (err, results) => {
         if (err) {
             console.error('Error querying restaurants:', err);
@@ -37,7 +37,7 @@ db.connect((err) => {
     });
 });
 
-// Error handling for lost connections
+// error handling for lost connections
 db.on('error', function(err) {
     console.error('Database error:', err);
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
@@ -50,10 +50,14 @@ db.on('error', function(err) {
 });
 
 // API Routes
-// Get all restaurants
+// get all restaurants
 app.get('/api/restaurants', (req, res) => {
     console.log('Fetching restaurants...');
-    const query = 'SELECT * FROM restaurants';
+    const query = `
+        SELECT r.*, k.name as kam_name 
+        FROM restaurants r 
+        LEFT JOIN kams k ON r.kam_id = k.id
+    `;
     db.query(query, (err, results) => {
         if (err) {
             console.error('Error fetching restaurants:', err);
@@ -81,7 +85,7 @@ app.post('/api/restaurants', (req, res) => {
     });
 });
 
-// Update restaurant
+// update restaurant
 app.put('/api/restaurants/:id', (req, res) => {
     console.log('Updating restaurant...');
     const { name, address, contact_number, status, kam_id } = req.body;
@@ -97,7 +101,42 @@ app.put('/api/restaurants/:id', (req, res) => {
     });
 });
 
-// Get restaurant contacts
+// Delete restaurant
+app.delete('/api/restaurants/:id', (req, res) => {
+    console.log('Deleting restaurant...');
+    // First delete all contacts and interactions
+    const queries = [
+        'DELETE FROM contacts WHERE restaurant_id = ?',
+        'DELETE FROM interactions WHERE restaurant_id = ?',
+        'DELETE FROM restaurants WHERE id = ?'
+    ];
+    
+    db.query(queries[0], [req.params.id], (err) => {
+        if (err) {
+            console.error('Error deleting restaurant contacts:', err);
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        db.query(queries[1], [req.params.id], (err) => {
+            if (err) {
+                console.error('Error deleting restaurant interactions:', err);
+                res.status(500).json({ error: err.message });
+                return;
+            }
+            db.query(queries[2], [req.params.id], (err) => {
+                if (err) {
+                    console.error('Error deleting restaurant:', err);
+                    res.status(500).json({ error: err.message });
+                    return;
+                }
+                console.log('Deleted restaurant with id:', req.params.id);
+                res.json({ success: true });
+            });
+        });
+    });
+});
+
+// get restaurant contacts
 app.get('/api/restaurants/:id/contacts', (req, res) => {
     console.log('Fetching restaurant contacts...');
     const query = 'SELECT * FROM contacts WHERE restaurant_id = ?';
@@ -112,7 +151,7 @@ app.get('/api/restaurants/:id/contacts', (req, res) => {
     });
 });
 
-// Add restaurant contact
+// post restaurant contact
 app.post('/api/contacts', (req, res) => {
     console.log('Adding new restaurant contact...');
     const { restaurant_id, name, role, phone_number, email } = req.body;
@@ -125,6 +164,21 @@ app.post('/api/contacts', (req, res) => {
         }
         console.log('Added restaurant contact with id:', result.insertId);
         res.json({ id: result.insertId, ...req.body });
+    });
+});
+
+// del contact
+app.delete('/api/contacts/:id', (req, res) => {
+    console.log('Deleting contact...');
+    const query = 'DELETE FROM contacts WHERE id = ?';
+    db.query(query, [req.params.id], (err) => {
+        if (err) {
+            console.error('Error deleting contact:', err);
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        console.log('Deleted contact with id:', req.params.id);
+        res.json({ success: true });
     });
 });
 
@@ -164,7 +218,7 @@ app.post('/api/interactions', (req, res) => {
     });
 });
 
-// Get KAMs
+// Get kams
 app.get('/api/kams', (req, res) => {
     console.log('Fetching KAMs...');
     const query = 'SELECT * FROM kams';
@@ -179,7 +233,50 @@ app.get('/api/kams', (req, res) => {
     });
 });
 
-// Serve the frontend
+// Add new KAM
+app.post('/api/kams', (req, res) => {
+    console.log('Adding new KAM...');
+    const { name, email, phone } = req.body;
+    const query = 'INSERT INTO kams (name, email, phone) VALUES (?, ?, ?)';
+    db.query(query, [name, email, phone], (err, result) => {
+        if (err) {
+            console.error('Error adding KAM:', err);
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        console.log('Added KAM with id:', result.insertId);
+        res.json({ id: result.insertId, ...req.body });
+    });
+});
+
+// Delete KAM
+app.delete('/api/kams/:id', (req, res) => {
+    console.log('Deleting KAM...');
+    // checking if KAM has any assigned restaurants
+    const checkQuery = 'SELECT COUNT(*) as count FROM restaurants WHERE kam_id = ?';
+    db.query(checkQuery, [req.params.id], (err, results) => {
+        if (err) {
+            console.error('Error checking KAM restaurants:', err);
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        if (results[0].count > 0) {
+            res.status(400).json({ error: 'Cannot delete KAM with assigned restaurants' });
+            return;
+        }
+            //none, then proceed
+        const deleteQuery = 'DELETE FROM kams WHERE id = ?';
+        db.query(deleteQuery, [req.params.id], (err) => {
+            if (err) {
+                console.error('Error deleting KAM:', err);
+                res.status(500).json({ error: err.message });
+                return;
+            }
+            res.json({ success: true });
+        });
+    });
+});
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

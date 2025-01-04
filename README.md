@@ -1,10 +1,12 @@
-# Restaurant KAM Lead Management System 🍽️
+# Restaurant KAM Lead Management System
 
-A modern web application for managing restaurant leads and Key Account Manager (KAM) interactions. Perfect for sales teams and account managers working with restaurants.
+A modern web application for managing restaurant leads and Key Account Manager (KAM) interactions.
 
-## 🌟 Features
+- Made by Abhijai Srivastava for Udaan Internship Bangalore
 
-- **Dashboard Overview**
+## Features
+
+- **Dashboard** 
   - Quick stats on total restaurants, active leads, and follow-ups
   - Recent interaction timeline
   - Performance metrics at a glance
@@ -21,7 +23,6 @@ A modern web application for managing restaurant leads and Key Account Manager (
   - View interaction history by restaurant
   - Track KAM activities
 
-## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -72,7 +73,7 @@ A modern web application for managing restaurant leads and Key Account Manager (
 6. **Access the application**
    - Open your browser and visit: `http://localhost:3000`
 
-## 📚 API Documentation
+##  API Documentation
 
 ### Restaurants
 
@@ -96,7 +97,7 @@ A modern web application for managing restaurant leads and Key Account Manager (
 - `GET /api/kams` - Get all KAMs
 - `POST /api/kams` - Add a new KAM
 
-## 📊 Database Schema
+## Database Schema
 
 ```
 ┌──────────────┐     ┌──────────────┐
@@ -104,11 +105,12 @@ A modern web application for managing restaurant leads and Key Account Manager (
 ├──────────────┤     ├──────────────┤
 │ id           │     │ id           │
 │ name         │     │ name         │
-│ email        │     │ address      │
-│ created_at   │     │ contact_num  │
-└──────────┬───┘     │ status       │
-           │         │ kam_id       │◄─┐
-           └────────►│ created_at   │  │
+│ phone        │     │ address      │
+│ email        │     │ contact_num  │
+│ created_at   │     │ status       │
+└──────────┬───┘     │ kam_id       │◄─┐
+           │         │ created_at   │  │
+           └────────►│              │  │
                      └──────────────┘  │
                            ▲           │
                            │           │
@@ -138,7 +140,7 @@ A modern web application for managing restaurant leads and Key Account Manager (
 
 
 
-## 🔧 Key Functions
+## Key Functions
 
 ### Frontend Functions (app.js)
 
